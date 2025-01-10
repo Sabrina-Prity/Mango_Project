@@ -1,0 +1,118 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    height: 100vh;
+  }
+  
+  /* Customer Card Styles */
+  .customer-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+  }
+  
+  .customer-card img.customer-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #007BFF;
+    margin-bottom: 15px;
+    object-fit: cover;
+  }
+  
+  .customer-card h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  
+  .customer-card p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Order History Section */
+#order-history {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Layout */
+.order-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Table Header */
+.order-history-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+/* Table Cells */
+.order-history-table td {
+    background-color: #fff;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+/* Row Hover Effect */
+.order-history-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+#order-history p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+
+
+/* Purchase Delete Button */
+.delete-button {
+  background-color: #ff4d4f;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+  background-color: #d9363e;
+  transform: scale(1.05);
+}
+
+.delete-button:focus {
+  outline: 2px solid #ff7875;
+}
+
+.delete-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

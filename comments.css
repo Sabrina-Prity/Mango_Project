@@ -1,0 +1,71 @@
+/* Comment Section Styling */
+#comments-section {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#comments-section h3 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Comment Styling */
+.comment {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items vertically at the top */
+}
+
+/* Comment Content (Left Side) */
+.comment-content {
+    max-width: 80%;  /* Make sure comment content takes most of the space */
+}
+
+/* User Name */
+.comment-user {
+    margin-bottom: 10px;
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.comment-text {
+    font-size: 16px;
+    color: #555;
+}
+
+.comment-rating {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Delete Button (Right Side) */
+.delete-comment-btn {
+    padding: 8px 12px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-comment-btn:hover {
+    background-color: #c0392b;
+}

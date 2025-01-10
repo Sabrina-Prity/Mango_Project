@@ -1,0 +1,205 @@
+/* General Styles for the Display Container */
+#display-all-category {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px; /* Adjust the width as needed */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Styling */
+#display-all-category h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Category Item Styling */
+.category-item {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Hover Effect for Category Items */
+.category-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Text Styling */
+.category-item p {
+    font-size: 18px;
+    color: #555;
+    margin: 0;
+    font-family: 'Verdana', sans-serif;
+    font-weight: bold;
+}
+
+/* Optional: Add a "Delete" Button for Future Actions */
+.category-item button {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.category-item button:hover {
+    background-color: #e60000;
+}
+
+/* Basic styling for the container */
+.display-all-product {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.mango-item {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    width: calc(33.333% - 20px); /* Makes each product take 1/3 of the container width */
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.mango-item:hover {
+    transform: scale(1.05); /* Slightly enlarges the product item when hovered */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mango-item img {
+    max-width: 100%;
+    border-radius: 8px;
+    height: auto;
+}
+
+.mango-item p {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 10px 0;
+}
+
+.mango-item .delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mango-item .delete-btn:hover {
+    background-color: #c82333;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+/* Display All Mango From Add_Mango */
+
+.display-all-product {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+.display-all-product h2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+}
+
+/* Styling for each mango item */
+.mango-item {
+    width: 100%;
+    max-width: 250px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.mango-item:hover {
+    transform: scale(1.05);
+}
+
+.mango-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.mango-item p {
+    font-size: 1rem;
+    color: #555;
+    margin: 10px 0;
+}
+
+.mango-item button {
+    background-color: #ff4b5c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.mango-item button:hover {
+    background-color: #ff2b3a;
+}
+
+/* Handling cases for small screens */
+@media (max-width: 768px) {
+    .mango-item {
+        /* max-width: calc(33.33% - 20px);  */
+        max-width: calc(50% - 20px); 
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 425px) {
+    .mango-item {
+        max-width: 100%; 
+        margin-bottom: 20px;
+    }
+}
