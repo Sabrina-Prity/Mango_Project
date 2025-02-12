@@ -112,13 +112,19 @@ WSGI_APPLICATION = 'sweet_haven.wsgi.app'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.wduklpusipdfrcjsmxyh',
-        'PASSWORD': '.kfVQRmD6fXrx$4',
-        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '6543'
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+        'CONN_MAX_AGE': 60,
+        'OPTIONS': {
+            'options': '-c statement_timeout=30000',
+            'connect_timeout': 10,
+        },
     }
 }
+
 
 
 REST_FRAMEWORK = {
