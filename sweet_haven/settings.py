@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://sweet-haven-nu.vercel.app',
+    'https://mango-project-six.vercel.app/',
 ]
 # CSRF_TRUSTED_ORIGINS = [
 #     'https://sweet-haven.vercel.app',

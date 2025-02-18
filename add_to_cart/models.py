@@ -35,6 +35,7 @@ class Order(models.Model):
     product = models.ForeignKey(Mango, on_delete=models.CASCADE)
     quantity = models.IntegerField( default=1)
     buying_status = models.CharField(choices=BUYING_STATUS, max_length=10, default="Pending")
+
     purchased_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
