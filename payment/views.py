@@ -89,6 +89,7 @@ class Payment_View(APIView):
                     {
                         "status": "success",
                         "tran_id": transaction_id,
+                        "payment_status": "Pending",
                         "message": f"Payment successfully initiated for order ID {order.id}",
                         "payment_url": response.get("GatewayPageURL"),
                     },
