@@ -14,7 +14,7 @@ from add_to_cart.models import Order, Cart
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-
+from customer.models import Customer
 
 
 # Create your views here.
@@ -34,7 +34,7 @@ class Payment_View(APIView):
 
         try:
             order = Order.objects.get(id=order_id)
-            mobile = order.mobile
+            mobile = Customer.mobile_no
         except Order.DoesNotExist:
             return Response({"message": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
 
