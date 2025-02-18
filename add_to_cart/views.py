@@ -169,32 +169,30 @@ class CartItemsUpdate(APIView):
 #         return Response(serializer.data)
 
 
-
-
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderListCreateView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = OrderSerializer
-    def get_queryset(self):
-        print(f"User ID: {self.request.user.id}")  
-        print(f"User ID: {self.request.user}")  
-        return Order.objects.filter(user=self.request.user.id)
-        # object = Order.objects.filter(user=self.request.user)
-        # print("Object", object)
-        # serializer = self.serializer_class(object, many=True)
-        # return Response(serializer.data)
-    
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-    
+
+    def get(self, request, *args, **kwargs):
+        """
+        Retrieve all orders for the authenticated user.
+        """
+        orders = Order.objects.filter(user=request.user)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Place a new order for the authenticated user.
+        """
+        serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
             product_id = request.data.get('product')
             quantity = request.data.get('quantity', 1)
 
             try:
                 mango = Mango.objects.get(id=product_id)
-
                 quantity = int(quantity)
-                
+
                 if mango.quantity >= quantity:
                     mango.quantity -= quantity
                     mango.save()
@@ -219,13 +217,69 @@ class OrderViewSet(viewsets.ModelViewSet):
                 else:
                     return Response(
                         {"error": f"Not enough stock available. Only {mango.quantity} items left."},
-                        status=400
+                        status=status.HTTP_400_BAD_REQUEST
                     )
 
             except Mango.DoesNotExist:
-                return Response({"error": "Product not found."})
-        else:
-            return Response(serializer.errors)
+                return Response({"error": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class OrderViewSet(viewsets.ModelViewSet):
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = OrderSerializer
+#     def get_queryset(self):
+#         print(f"User ID: {self.request.user.id}")  
+#         print(f"User ID: {self.request.user}")  
+#         return Order.objects.filter(user=self.request.user.id)
+#         # object = Order.objects.filter(user=self.request.user)
+#         # print("Object", object)
+#         # serializer = self.serializer_class(object, many=True)
+#         # return Response(serializer.data)
+    
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+    
+#         if serializer.is_valid():
+#             product_id = request.data.get('product')
+#             quantity = request.data.get('quantity', 1)
+
+#             try:
+#                 mango = Mango.objects.get(id=product_id)
+
+#                 quantity = int(quantity)
+                
+#                 if mango.quantity >= quantity:
+#                     mango.quantity -= quantity
+#                     mango.save()
+
+#                     total_amount = mango.price * quantity
+#                     # Send the confirmation email
+#                     email_subject = "Order Confirmation"
+#                     email_body = render_to_string(
+#                         'order_pending_email.html',
+#                         {'user': request.user, 'product': mango.name, 'quantity': quantity, 'total_amount': total_amount}
+#                     )
+
+#                     email = EmailMultiAlternatives(
+#                         email_subject, '', to=[request.user.email]
+#                     )
+#                     email.attach_alternative(email_body, "text/html")
+#                     email.send()
+
+#                     # Assign the current user to the order
+#                     order = serializer.save(user=request.user)
+#                     return Response({"message": "Order placed successfully. A confirmation email has been sent."})
+#                 else:
+#                     return Response(
+#                         {"error": f"Not enough stock available. Only {mango.quantity} items left."},
+#                         status=400
+#                     )
+
+#             except Mango.DoesNotExist:
+#                 return Response({"error": "Product not found."})
+#         else:
+#             return Response(serializer.errors)
 
 
 
@@ -417,16 +471,11 @@ class AdminOrderUpdateAPIView(APIView):
         
 
 
-
-class OrderHistoryViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = OrderSerializer
-    # permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
-
-    def list(self, request, *args, **kwargs):
-        orders = self.get_queryset()
+class OrderHistoryView(APIView):
+    # permission_classes = [IsAuthenticated]  
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.filter(user=request.user)
+        
         order_data = [
             {
                 'product': order.product.name,
@@ -436,4 +485,25 @@ class OrderHistoryViewSet(viewsets.ReadOnlyModelViewSet):
             }
             for order in orders
         ]
+
+        # Return the orders in the response
         return Response({"orders": order_data})
+# class OrderHistoryViewSet(viewsets.ReadOnlyModelViewSet):
+#     serializer_class = OrderSerializer
+#     # permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Order.objects.filter(user=self.request.user)
+
+#     def list(self, request, *args, **kwargs):
+#         orders = self.get_queryset()
+#         order_data = [
+#             {
+#                 'product': order.product.name,
+#                 'quantity': order.quantity,
+#                 'status': order.buying_status,
+#                 'purchased_at': order.purchased_at,
+#             }
+#             for order in orders
+#         ]
+#         return Response({"orders": order_data})
