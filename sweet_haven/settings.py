@@ -101,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sweet_haven.wsgi.application'
+WSGI_APPLICATION = 'sweet_haven.wsgi.app'
 
 
 # Database
