@@ -1,19 +1,15 @@
-
-
 {
   "version": 2,
   "builds": [
     {
-      "src": "sweet_haven/wsgi.py",
+      "src": "wsgi.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "sweet_haven/wsgi.py"
+      "dest": "wsgi.py"
     }
   ]
 }
-
-
