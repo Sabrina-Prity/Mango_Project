@@ -11,10 +11,5 @@
       "src": "/(.*)",
       "dest": "sweet_haven/wsgi.py"
     }
-  ],
-  "functions": {
-    "sweet_haven/wsgi.py": {
-      "timeout": 60
-    }
-  }
+  ]
 }
