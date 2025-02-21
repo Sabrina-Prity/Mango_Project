@@ -123,10 +123,10 @@ class Payment_View(APIView):
 class PaymentSuccess_View(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):  # Handle POST requests
+    def post(self, request):
         return self.process_payment(request)
 
-    def get(self, request):  # Handle GET requests
+    def get(self, request):
         return self.process_payment(request)
 
     def process_payment(self, request):
@@ -136,25 +136,22 @@ class PaymentSuccess_View(APIView):
             return Response({"message": "Transaction ID missing"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            # Retrieve the payment using the transaction ID
             payment = Payment_Model.objects.get(transaction_id=transaction_id)
+            # Update the payment status to completed
             payment.payment_status = "Completed"
             payment.save()
 
-            
-            # order = payment.order  
-            # order.buying_status = "Completed"
-            # order.save()
+            # Assuming the payment is related to an order, retrieve the associated order
+            order = payment.order  # Adjust based on your model structure
+            order.buying_status = "Completed"  # Update the order's status
+            order.save()
 
+            # Redirect user to a confirmation page or profile
             return redirect(f"https://sabrina-prity.github.io/Mango_Project_Frontend/profile.html")
 
-            # return Response(
-            #     {"message": "Payment successful!", "transaction_id": transaction_id},
-            #     status=status.HTTP_200_OK
-            # )
         except Payment_Model.DoesNotExist:
-            return Response(
-                {"message": "Invalid transaction"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"message": "Invalid transaction"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
