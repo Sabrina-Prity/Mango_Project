@@ -314,6 +314,7 @@ class UserOrdersView(APIView):
         serializer = serializers.OrderSerializer(data={
             'quantity': quantity,
             'buying_status': request.data.get('buying_status'),
+            'payment_status': request.data.get('payment_status'),
             'user': request.data.get('user'),
             'product': product_id
         })
@@ -428,9 +429,12 @@ class AdminOrderUpdateAPIView(APIView):
         serializer = serializers.OrderGetSerializer(order, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            new_status = request.data.get('buying_status')
+            order.payment_status = request.data.get('payment_status', order.payment_status)
+            order.buying_status = request.data.get('buying_status', order.buying_status)
+            order.save()
 
-            if new_status == 'Completed':
+            # If buying status is updated to 'Completed', send email notification
+            if order.buying_status == "Completed":
                 self.send_order_completion_email(order)  
                 return Response({"message": "Order updated to 'Completed' and email sent."})
 

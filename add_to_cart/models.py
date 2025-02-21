@@ -29,13 +29,18 @@ BUYING_STATUS = [
     ('Completed', 'Completed'),
     ('Pending', 'Pending'),
 ]
+PAYMENT_STATUS = [
+    ('Pending', 'Pending'), 
+    ('Completed', 'Completed'), 
+    ('Canceled', 'Canceled'),
+]
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Mango, on_delete=models.CASCADE)
     quantity = models.IntegerField( default=1)
     buying_status = models.CharField(choices=BUYING_STATUS, max_length=10, default="Pending")
-
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='Pending')
     purchased_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
