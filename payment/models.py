@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from add_to_cart.models import Order
 from django.core.exceptions import ValidationError
 
 # Payment status choices
@@ -17,7 +16,8 @@ def positive_amount(value):
 
 class Payment_Model(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="payments")
+    order = models.ForeignKey('add_to_cart.Order', on_delete=models.CASCADE, related_name='payments')  # Specify related_name
+
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[positive_amount])
     transaction_id = models.CharField(max_length=100, unique=True)
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='Pending')
