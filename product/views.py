@@ -55,7 +55,18 @@ class MangoAPIView(APIView):
         else:
             return Response({"detail": "Category is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+class MangoDetailAPIView(APIView):
+    permission_classes = [AllowAny]
 
+    def get(self, request, *args, **kwargs):
+        mango_id = kwargs.get('id')
+        try:
+            # Fetch the mango by its ID
+            mango = Mango.objects.get(id=mango_id)
+            serializer = MangoSerializer(mango)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Mango.DoesNotExist:
+            return Response({"detail": "Mango not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 
