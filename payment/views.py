@@ -145,7 +145,7 @@ class PaymentSuccess_View(APIView):
             # order.buying_status = "Completed"
             # order.save()
 
-            return redirect(f"https://sabrina-prity.github.io/Quick_Bite_Frontend/customer_orders.html")
+            return redirect(f"https://sabrina-prity.github.io/Mango_Project_Frontend/profile.html")
 
             # return Response(
             #     {"message": "Payment successful!", "transaction_id": transaction_id},
@@ -174,7 +174,7 @@ class PaymentFail_View(APIView):
             # order.buying_status = 'Canceled'
             # order.save()
 
-            return HttpResponseRedirect(f"http://127.0.0.1:5500/index.html")  # Updated URL
+            return HttpResponseRedirect(f"https://sabrina-prity.github.io/Mango_Project_Frontend/profile.html")  # Updated URL
         except Payment_Model.DoesNotExist:
             return Response({'message': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -195,6 +195,6 @@ class PaymentCancel_View(APIView):
             # order.buying_status = 'Canceled'
             # order.save()
 
-            return HttpResponseRedirect(f"http://127.0.0.1:5500/index.html")  # Updated URL
+            return HttpResponseRedirect(f"https://sabrina-prity.github.io/Mango_Project_Frontend/profile.html")  # Updated URL
         except Payment_Model.DoesNotExist:
             return Response({'message': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
