@@ -12,6 +12,7 @@ from rest_framework.decorators import action
 from .models import IsAdminUser
 from rest_framework.permissions import IsAuthenticated
 from .models import Cart
+from payment.models import Payment_Model
 # for sending email
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -172,14 +173,6 @@ class CartItemsUpdate(APIView):
 class OrderListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        """
-        Retrieve all orders for the authenticated user.
-        """
-        orders = Order.objects.filter(user=request.user)
-        serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data)
-
     def post(self, request, *args, **kwargs):
         """
         Place a new order for the authenticated user.
@@ -198,6 +191,14 @@ class OrderListCreateView(APIView):
                     mango.save()
 
                     total_amount = mango.price * quantity
+                    
+                    # Create a payment record
+                    payment = Payment_Model.objects.create(
+                        amount=total_amount,
+                        payment_status="Pending",
+                        order=None  # Associate with the order later
+                    )
+
                     # Send the confirmation email
                     email_subject = "Order Confirmation"
                     email_body = render_to_string(
@@ -211,8 +212,11 @@ class OrderListCreateView(APIView):
                     email.attach_alternative(email_body, "text/html")
                     email.send()
 
-                    # Assign the current user to the order
-                    order = serializer.save(user=request.user)
+                    # Create the order and associate the payment
+                    order = serializer.save(user=request.user, payment=payment)
+                    payment.order = order
+                    payment.save()
+
                     return Response({"message": "Order placed successfully. A confirmation email has been sent."})
                 else:
                     return Response(
@@ -224,6 +228,7 @@ class OrderListCreateView(APIView):
                 return Response({"error": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # class OrderViewSet(viewsets.ModelViewSet):
 #     permission_classes = [IsAuthenticated]
@@ -429,18 +434,18 @@ class AdminOrderUpdateAPIView(APIView):
         serializer = serializers.OrderGetSerializer(order, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            order.payment_status = request.data.get('payment_status', order.payment_status)
+            order.payment.payment_status = request.data.get('payment_status', order.payment.payment_status)
             order.buying_status = request.data.get('buying_status', order.buying_status)
             order.save()
 
             # If buying status is updated to 'Completed', send email notification
             if order.buying_status == "Completed":
-                self.send_order_completion_email(order)  
+                self.send_order_completion_email(order)
                 return Response({"message": "Order updated to 'Completed' and email sent."})
 
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
     
     def delete(self, request, *args, **kwargs):

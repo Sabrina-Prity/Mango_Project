@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from product.models import Mango
 from rest_framework.permissions import BasePermission
+from payment.models import Payment_Model
 # Create your models here.
 
 class Cart(models.Model):
@@ -29,18 +30,14 @@ BUYING_STATUS = [
     ('Completed', 'Completed'),
     ('Pending', 'Pending'),
 ]
-PAYMENT_STATUS = [
-    ('Pending', 'Pending'), 
-    ('Completed', 'Completed'), 
-    ('Canceled', 'Canceled'),
-]
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Mango, on_delete=models.CASCADE)
     quantity = models.IntegerField( default=1)
     buying_status = models.CharField(choices=BUYING_STATUS, max_length=10, default="Pending")
-    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='Pending')
+    payment = models.ForeignKey(Payment_Model, on_delete=models.CASCADE, null=True, blank=True)
+
     purchased_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
