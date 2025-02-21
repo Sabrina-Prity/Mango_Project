@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG=False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -101,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sweet_haven.wsgi.app'
+WSGI_APPLICATION = 'sweet_haven.wsgi.application'
 
 
 # Database
@@ -123,10 +123,10 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
-        'CONN_MAX_AGE': 500,  # Increased for better performance
+        'CONN_MAX_AGE': 60,
         'OPTIONS': {
-            'options': '-c statement_timeout=60000',  # 60s timeout
-            'connect_timeout': 20,
+            'options': '-c statement_timeout=30000',
+            'connect_timeout': 10,
         },
     }
 }
@@ -182,11 +182,12 @@ USE_TZ = True
 
 
 
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / 'staticfiles' 
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # WSGI_APPLICATION = 'sweet_haven.wsgi.application'
 

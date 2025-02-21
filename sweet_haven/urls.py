@@ -28,9 +28,7 @@ urlpatterns = [
     path('category/', include('category.urls')),
     path('product/', include('product.urls')),
     path('payment/', include('payment.urls')),
-    path('/', home),
+    path('', home),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
