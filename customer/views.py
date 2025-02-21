@@ -21,9 +21,10 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.shortcuts import redirect
 from rest_framework.permissions import IsAdminUser
+from django.http import HttpResponse
 
-
-
+def home(request):
+    return HttpResponse("Welcome to QuickBite API!")
 
 class UserRegistrationApiView(APIView):
     permission_classes = [AllowAny]
