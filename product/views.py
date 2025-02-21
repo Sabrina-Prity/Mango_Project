@@ -58,14 +58,19 @@ class MangoAPIView(APIView):
 class MangoDetailAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        mango_id = kwargs.get('id')
+    def get(self, request, id, format=None):
         try:
-            # Fetch the mango by its ID
-            mango = Mango.objects.get(id=mango_id)
+            # Fetch the mango object by its ID
+            mango = Mango.objects.get(id=id)
+            
+            # Serialize the mango data
             serializer = MangoSerializer(mango)
+            
+            # Return the serialized mango data as a JSON response
             return Response(serializer.data, status=status.HTTP_200_OK)
+        
         except Mango.DoesNotExist:
+            # Return a 404 if the mango with the provided ID doesn't exist
             return Response({"detail": "Mango not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
