@@ -107,19 +107,17 @@ class MangoDetailAPIView(APIView):
 
 
 class CommentAPIView(APIView):
-    permission_classes = [AllowAny]  # Adjust permission as needed (AllowAny is not secure for POST requests in production)
+    permission_classes = [AllowAny]
 
-    # GET method to fetch comments for a specific mango
-    def get(self, request, mango_id, format=None):
-        # Retrieve the mango_id from the URL and get all associated comments
-        comments = Comment.objects.filter(mango_id=mango_id)
-        if comments.exists():
+    def get(self, request, *args, **kwargs):
+        mango_id = request.query_params.get('mango_id', None)
+        
+        if mango_id:
+            comments = Comment.objects.filter(mango_id=mango_id)
             serializer = CommentSerializer(comments, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data)
         else:
-            return Response({"detail": "No comments found for this mango."}, status=status.HTTP_404_NOT_FOUND)
-
-    # POST method to create a comment for a specific mango
+            return Response({"detail": "Mango ID is required."}, status=status.HTTP_400_BAD_REQUEST)
     def post(self, request, *args, **kwargs):
         user = request.user 
         mango_id = request.data.get('mango')  # Get the mango ID from request data
