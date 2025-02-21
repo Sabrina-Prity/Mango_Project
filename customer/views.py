@@ -24,7 +24,7 @@ from rest_framework.permissions import IsAdminUser
 from django.http import HttpResponse
 
 def home(request):
-    return HttpResponse("Welcome to QuickBite API!")
+    return HttpResponse("Welcome to Sweet Haven API!")
 
 class UserRegistrationApiView(APIView):
     permission_classes = [AllowAny]
