@@ -319,7 +319,6 @@ class UserOrdersView(APIView):
         serializer = serializers.OrderSerializer(data={
             'quantity': quantity,
             'buying_status': request.data.get('buying_status'),
-            'payment_status': request.data.get('payment_status'),
             'user': request.data.get('user'),
             'product': product_id
         })
