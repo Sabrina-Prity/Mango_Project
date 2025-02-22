@@ -299,7 +299,7 @@ class UserOrdersView(APIView):
         # print("Params", param)
         # params = request.data.get.query_params()
         object = Order.objects.filter(user = param)
-        serializer = serializers.OrderPostSerializer(object, many=True)
+        serializer = serializers.OrderGetSerializer(object, many=True)
         return Response(serializer.data)
     
     def post(self, request, format=None):

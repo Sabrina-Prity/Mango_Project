@@ -32,11 +32,18 @@ class CartItemsUpdateSerializer(serializers.ModelSerializer):
 
 
 
+# class OrderSerializer(serializers.ModelSerializer):
+#     # user = serializers.StringRelatedField(many=False)
+#     class Meta:
+#         model = models.Order
+#         fields = '__all__'
+
 class OrderSerializer(serializers.ModelSerializer):
-    # user = serializers.StringRelatedField(many=False)
+    payment_status = serializers.CharField(source="payment.payment_status", read_only=True)
+
     class Meta:
         model = models.Order
-        fields = '__all__'
+        fields = ['id', 'user', 'product', 'quantity', 'buying_status', 'purchased_at', 'payment', 'payment_status']
 
 
 class OrderGetSerializer(serializers.ModelSerializer):
@@ -45,9 +52,9 @@ class OrderGetSerializer(serializers.ModelSerializer):
         model = models.Order
         fields = '__all__'
 
-class OrderPostSerializer(serializers.ModelSerializer):
-    payment_status = serializers.CharField(source="payment.payment_status", read_only=True)
+# class OrderPostSerializer(serializers.ModelSerializer):
+#     payment_status = serializers.CharField(source="payment.payment_status", read_only=True)
 
-    class Meta:
-        model = models.Order
-        fields = ['id', 'user', 'product', 'quantity', 'buying_status', 'purchased_at', 'payment', 'payment_status']
+#     class Meta:
+#         model = models.Order
+#         fields = ['id', 'user', 'product', 'quantity', 'buying_status', 'purchased_at', 'payment', 'payment_status']
