@@ -141,16 +141,11 @@ class PaymentSuccess_View(APIView):
                 payment.payment_status = "Completed"
                 payment.save()
                 print("Manually updated:", payment.payment_status)
-            # # Retrieve the payment using the transaction ID
-            # payment = Payment_Model.objects.get(transaction_id=transaction_id)
-            # # Update the payment status to completed
-            # payment.payment_status = "Completed"
-            # payment.save()
+            
 
-            # Assuming the payment is related to an order, retrieve the associated order
-            order = payment.order  # Adjust based on your model structure
-            order.buying_status = "Completed"  # Update the order's status
-            order.save()
+            # order = payment.order  # Adjust based on your model structure
+            # order.buying_status = "Completed"  # Update the order's status
+            # order.save()
 
             # Redirect user to a confirmation page or profile
             return redirect(f"https://sabrina-prity.github.io/Mango_Project_Frontend/profile.html")
