@@ -136,11 +136,16 @@ class PaymentSuccess_View(APIView):
             return Response({"message": "Transaction ID missing"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Retrieve the payment using the transaction ID
-            payment = Payment_Model.objects.get(transaction_id=transaction_id)
-            # Update the payment status to completed
-            payment.payment_status = "Completed"
-            payment.save()
+            payment = Payment_Model.objects.filter(payment_status="Pending").first()
+            if payment:
+                payment.payment_status = "Completed"
+                payment.save()
+                print("Manually updated:", payment.payment_status)
+            # # Retrieve the payment using the transaction ID
+            # payment = Payment_Model.objects.get(transaction_id=transaction_id)
+            # # Update the payment status to completed
+            # payment.payment_status = "Completed"
+            # payment.save()
 
             # Assuming the payment is related to an order, retrieve the associated order
             order = payment.order  # Adjust based on your model structure
