@@ -47,7 +47,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderGetSerializer(serializers.ModelSerializer):
     payment_status = serializers.SerializerMethodField()
-
+    product=MangoSerializer()
     class Meta:
         model = models.Order
         fields = ['id', 'quantity', 'buying_status', 'purchased_at', 'product', 'user', 'payment_status']
