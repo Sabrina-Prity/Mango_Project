@@ -333,12 +333,28 @@ class UserOrdersView(APIView):
                 return Response({"error": "Invalid product quantity."}, status=400)
 
             total_amount = product.price * quantity
-            
+
             if product.quantity >= quantity:
                 product.quantity -= quantity
                 product.save()
             else:
                 return Response({"error": "Not enough stock available."}, status=400)
+
+            # Save the order first
+            order = serializer.save()
+
+            # **Create a pending payment for this order**
+            payment = Payment_Model.objects.create(
+                user=request.user,
+                order=order,
+                amount=total_amount,
+                transaction_id=f"txn_{order.id}",  # Example transaction ID, change as needed
+                payment_status="Pending"
+            )
+
+            # Link the payment to the order
+            order.payment = payment
+            order.save()
 
             email_subject = "Order Confirmation"
             email_body = render_to_string(
@@ -350,7 +366,7 @@ class UserOrdersView(APIView):
                     'total_amount': total_amount
                 }
             )
-            
+
             if hasattr(request.user, 'email'):
                 email = EmailMultiAlternatives(
                     email_subject, '', to=[request.user.email]
@@ -358,12 +374,74 @@ class UserOrdersView(APIView):
                 email.attach_alternative(email_body, "text/html")
                 email.send()
 
-            # Save the order
-            serializer.save()
-            return Response({"message": "Post Successful", "order": serializer.data})
+            return Response({"message": "Order placed successfully", "order": serializer.data})
         else:
             print("Errors:", serializer.errors)
             return Response({"error": "Invalid data", "details": serializer.errors}, status=400)
+
+        
+    # def post(self, request, format=None):
+    #     if not request.user.is_authenticated:
+    #         return Response({"error": "User not authenticated."}, status=401)
+
+    #     try:
+    #         quantity = int(request.data.get('quantity'))
+    #     except (ValueError, TypeError):
+    #         return Response({"error": "Invalid quantity. Must be an integer."}, status=400)
+
+    #     try:
+    #         product_id = int(request.data.get('product'))
+    #     except (ValueError, TypeError):
+    #         return Response({"error": "Invalid product ID. Must be an integer."}, status=400)
+
+    #     serializer = serializers.OrderSerializer(data={
+    #         'quantity': quantity,
+    #         'buying_status': request.data.get('buying_status'),
+    #         'user': request.data.get('user'),
+    #         'product': product_id
+    #     })
+
+    #     if serializer.is_valid():
+    #         try:
+    #             product = Mango.objects.get(pk=product_id)
+    #         except Mango.DoesNotExist:
+    #             return Response({"error": "Product not found."}, status=404)
+
+    #         if not hasattr(product, 'quantity') or product.quantity is None:
+    #             return Response({"error": "Invalid product quantity."}, status=400)
+
+    #         total_amount = product.price * quantity
+            
+    #         if product.quantity >= quantity:
+    #             product.quantity -= quantity
+    #             product.save()
+    #         else:
+    #             return Response({"error": "Not enough stock available."}, status=400)
+
+    #         email_subject = "Order Confirmation"
+    #         email_body = render_to_string(
+    #             'order_pending_email.html',
+    #             {
+    #                 'user': request.user,
+    #                 'product': product.name,
+    #                 'quantity': quantity,
+    #                 'total_amount': total_amount
+    #             }
+    #         )
+            
+    #         if hasattr(request.user, 'email'):
+    #             email = EmailMultiAlternatives(
+    #                 email_subject, '', to=[request.user.email]
+    #             )
+    #             email.attach_alternative(email_body, "text/html")
+    #             email.send()
+
+    #         # Save the order
+    #         serializer.save()
+    #         return Response({"message": "Post Successful", "order": serializer.data})
+    #     else:
+    #         print("Errors:", serializer.errors)
+    #         return Response({"error": "Invalid data", "details": serializer.errors}, status=400)
     
   
 
