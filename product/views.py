@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from category.models import Category
 from . import serializers
-
+from django.db.models import Q
 
 # class MangoPagination(pagination.PageNumberPagination):
 #     page_size = 6 #ek page e koita item thakbe
@@ -35,25 +35,46 @@ from . import serializers
 #         else:
 #             # Handle the case where category is missing (maybe throw an error or set default)
 #             raise serializers.ValidationError('Category is required.')
+
+
 class MangoAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
+        query = request.GET.get("search", "").strip()
+        
+        # Get all mangoes
         mangoes = Mango.objects.all()
+
+        if query:
+            mangoes = mangoes.filter(
+                Q(name__icontains=query) |  # Search by name
+                Q(category__name__icontains=query) |  # Search by category name
+                Q(description__icontains=query)  # Search by description
+            )
+
         serializer = MangoSerializer(mangoes, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         category_id = request.data.get('category')
+
         if category_id:
-            category = Category.objects.get(id=category_id)
+            try:
+                category = Category.objects.get(id=category_id)
+            except Category.DoesNotExist:
+                return Response({"detail": "Category not found."}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer = MangoSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(category=category)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"detail": "Category is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"detail": "Category is required."}, status=status.HTTP_400_BAD_REQUEST)
+    
+
 
 class MangoDetailAPIView(APIView):
     permission_classes = [AllowAny]
