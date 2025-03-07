@@ -168,3 +168,17 @@ class CommentAPIView(APIView):
         if mango_id:
             queryset = queryset.filter(mango_id=mango_id)
         return queryset
+
+
+class AllCommentsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        # Fetch all comments from the database
+        comments = Comment.objects.all()
+        
+        # Serialize the comments
+        serializer = CommentSerializer(comments, many=True)
+        
+        # Return the serialized comments as a response
+        return Response(serializer.data)
